@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Angular Forms</title>
+
+        <!-- LOAD BOOTSTRAP CSS -->
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+
+        <!-- LOAD JQUERY -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <!-- LOAD ANGULAR -->
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+
+        <!-- PROCESS FORM WITH AJAX (NEW) -->
+        <script>
+            var myApp = angular.module('myApp', []);
+            myApp.controller('accountsCtrl', function ($scope, $http) {
+
+                $scope.newAccount = function () {
+                    //add data
+                    if (!$scope.accountData.content) {
+                        $scope.accounts = "Comment is required.";
+                    } else {
+                        $http.post('http://localhost:81/blog_canvas/public/api/comment',
+                                {
+                                    user_id: $scope.accountData.user_id,
+                                    poststable_id: $scope.accountData.poststable_id,
+                                    content: $scope.accountData.content
+
+                                })
+                                .success(function (response) {
+                                    $scope.accounts = response.message;
+                                })
+                                .error(function (response) {
+                                    $scope.accounts = response;
+                                });
+                    }
+                };
+            });
+        </script>
+        <style>
+            .ng-valid.ng-dirty{
+                border-color: green;
+            }
+            .ng-invalid.ng-dirty{
+                border-color: red;
+            }
+        </style>
+    </head>
+    <!-- apply the module and controller to our body so angular is applied to that -->
+    <body ng-app="myApp" ng-controller="accountsCtrl">
+        <!-- FORM -->
+        {{accounts}}
+        <form ng-submit="newAccount()">
+            <div class="form-group">
+                <label for="email">user_id</label>
+                <input type="text" class="form-control" id="user_id" ng-model="accountData.user_id">
+            </div>
+
+            <div class="form-group">
+                <label for="fullname">poststable_id</label>
+                <input type="text" class="form-control" id="poststable_id" ng-model="accountData.poststable_id">
+            </div>
+
+            <div class="form-group">
+                <label for="age">content</label>
+                <textarea class="form-control" id="content" ng-model="accountData.content"></textarea>
+            </div>
+            <input type="submit" name="submit">
+        </form>
+    </body>
+</html>

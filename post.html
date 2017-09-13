@@ -1,0 +1,13 @@
+<div infinite-scroll='ghRepo.nextPage()' infinite-scroll-disabled='ghRepo.busy' infinite-scroll-distance='1'> 
+    <div ng-repeat='repo in ghRepo.repos'>
+        <a ng-href="postdetail/{{repo.slug}}"><h2>{{repo.title}}</h2></a>   
+        <div ng-if="repo.page_image">
+            <img src="http://localhost:8000{{repo.page_image}}">
+        </div>
+
+        <p ng-bind-html="repo.content_html | unsafe"></p>   
+        <div style='clear: both;'></div>
+        <hr style="background: #fff000;height: 10px;">
+    </div>
+    <div ng-show='ghRepo.busy'>Loading data...</div>
+</div>
